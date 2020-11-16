@@ -2,7 +2,11 @@ package br.com.unipac.crudalunos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -26,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         listaDeAlunosLV = (ListView) findViewById(R.id.listaDeAlunosLV);
         alunoDatabase = AlunoDatabase.getInstance(this);
 
-        Aluno aluno = new Aluno(1, "Rogerio");
+        /*Aluno aluno = new Aluno(1, "Rogerio");
         alunoDatabase.getAlunoDao().insert(aluno);
 
         Aluno aluno1 = new Aluno(2, "MAria");
@@ -37,11 +41,40 @@ public class MainActivity extends AppCompatActivity {
 
         Aluno aluno3 = new Aluno(4, "Patricia");
         alunoDatabase.getAlunoDao().insert(aluno3);
+     */
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         List<Aluno> alunoList = alunoDatabase.getAlunoDao().list();
 
         alunoAdapter = new AlunoAdapter(alunoList, this);
         listaDeAlunosLV.setAdapter(alunoAdapter);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                return true;
+            case R.id.menu_cadastrar:
+                Intent intent = new Intent(this, AdicionarAlunoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
